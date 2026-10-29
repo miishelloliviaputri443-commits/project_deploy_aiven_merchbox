@@ -1,0 +1,13 @@
+:root{--ink:#17202a;--muted:#6d747d;--line:#e7e1d8;--accent:#ee6c4d;--paper:#fffdf9;--soft:#f5efe7}
+*{box-sizing:border-box}
+body{margin:0;color:var(--ink);background:var(--paper);font-family:Arial,sans-serif}
+.header{align-items:center;display:flex;justify-content:space-between;margin:auto;max-width:1120px;padding:26px 24px}
+.brand{font-size:24px;font-weight:800;letter-spacing:2px}.brand span{color:var(--accent)}
+.hero{background:var(--soft);padding:86px max(24px,calc((100% - 1072px)/2))}.eyebrow,.tag{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
+h1{font-size:clamp(42px,7vw,80px);line-height:.98;margin:18px 0}.hero p{color:var(--muted);font-size:18px}
+.main{margin:auto;max-width:1120px;padding:56px 24px}.main h2{font-size:30px;margin:0 0 8px}.muted{color:var(--muted)}
+.grid{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:32px}.product{border:1px solid var(--line);background:#fff}.art{align-items:center;background:var(--soft);display:flex;font-size:64px;height:220px;justify-content:center;overflow:hidden}.info{padding:20px}.info h3{margin:10px 0 8px}.desc{color:var(--muted);line-height:1.5;min-height:44px}.price-row{display:flex;justify-content:space-between;margin-top:22px}
+.btn{border:1px solid var(--ink);cursor:pointer;font-weight:700;padding:10px 14px}.primary{background:var(--accent);border-color:var(--accent);color:#fff}.secondary{background:#fff}
+.admin{border:1px solid var(--line);margin:36px 0;padding:24px}.form{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));margin:20px 0 36px}.form input,.form textarea{border:1px solid #ccc;font:inherit;padding:12px;width:100%}.form textarea{grid-column:1/-1;min-height:90px}.admin-table{border-collapse:collapse;min-width:620px;width:100%}.admin-table th,.admin-table td{border-bottom:1px solid var(--line);padding:12px;text-align:left}.admin-table th{font-size:12px;text-transform:uppercase}
+.error,.notice{padding:12px 16px}.error{background:#fff0ee;color:#b42318}.notice{background:#edf9f0;color:#176b2c}.footer{border-top:1px solid var(--line);color:var(--muted);padding:28px 24px;text-align:center}
+@media(max-width:600px){.header{padding:20px 16px}.hero{padding:64px 16px}.main{padding:40px 16px}.form{grid-template-columns:1fr}.form textarea{grid-column:auto}}
