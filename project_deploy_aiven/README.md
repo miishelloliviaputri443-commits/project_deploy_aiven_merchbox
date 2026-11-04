@@ -7,5 +7,6 @@ Struktur satu aplikasi Next.js mengikuti screenshot: app/, app/api/products, lib
 3. Jalankan `npm install` lalu `npm run dev`.
 4. Deploy repository ini ke Vercel dan masukkan environment variables yang sama di Project Settings.
 
-CRUD produk: GET/POST /api/products dan GET/PUT/DELETE /api/products/:id. Pesanan: GET/POST /api/orders.
-Panel CRUD contoh ini belum memiliki login admin; jangan biarkan terbuka untuk pengelolaan publik tanpa autentikasi.
+CRUD produk: GET/POST /api/products dan GET/PUT/DELETE /api/products/:id.
+Database produk difokuskan hanya untuk kategori `Gantungan Kunci`. Saat menjalankan schema terbaru, produk dengan kategori lain akan dihapus dan produk baru wajib memakai kategori tersebut.
+Autentikasi pengguna tersedia melalui POST `/api/auth/register`, POST `/api/auth/login`, POST `/api/auth/logout`, dan GET `/api/auth/me`. Password disimpan sebagai hash, sedangkan login disimpan dalam cookie bertanda tangan menggunakan `AUTH_SECRET`. Database hanya membutuhkan tabel `users`.

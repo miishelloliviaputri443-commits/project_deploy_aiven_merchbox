@@ -20,7 +20,11 @@ export default function HomePage() {
     [message, setMessage] = useState(""),
     [show, setShow] = useState(false),
     [form, setForm] = useState(empty),
-    [editId, setEditId] = useState(null);
+    [editId, setEditId] = useState(null),
+    [user, setUser] = useState(null),
+    [checkingSession, setCheckingSession] = useState(true),
+    [authMode, setAuthMode] = useState("login"),
+    [authForm, setAuthForm] = useState({ name: "", email: "", password: "" });
   async function load() {
     try {
       const r = await fetch("/api/products", { cache: "no-store" }),
@@ -34,7 +38,50 @@ export default function HomePage() {
   }
   useEffect(() => {
     load();
+    fetch("/api/auth/me", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((j) => {
+        if (!j.data) {
+          window.location.href = "/auth";
+          return;
+        }
+        setUser(j.data);
+      })
+      .catch(() => setUser(null))
+      .finally(() => setCheckingSession(false));
   }, []);
+  async function authenticate(e) {
+    e.preventDefault();
+    setError("");
+    setMessage("");
+    try {
+      const r = await fetch(`/api/auth/${authMode}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(authForm),
+      });
+      const j = await r.json();
+      if (!r.ok) throw Error(j.message || "Autentikasi gagal");
+      setUser(j.data || { name: authForm.name, email: authForm.email });
+      setAuthForm({ name: "", email: "", password: "" });
+      setMessage(j.message);
+    } catch (e) {
+      setError(e.message);
+    }
+  }
+  async function logout() {
+    const r = await fetch("/api/auth/logout", { method: "POST" });
+    const j = await r.json();
+    if (!r.ok) {
+      setError(j.message || "Logout gagal");
+      return;
+    }
+    setUser(null);
+    window.location.href = "/auth";
+  }
+  if (checkingSession || !user) {
+    return <main className="auth-page"><p className="muted">Memuat halaman...</p></main>;
+  }
   async function save(e) {
     e.preventDefault();
     try {
@@ -78,9 +125,21 @@ export default function HomePage() {
         <div className="brand">
           MERCH<span>BOX</span>
         </div>
-        <button className="btn secondary" onClick={() => setShow(!show)}>
-          {show ? "Tutup CRUD" : "Kelola Produk (CRUD)"}
-        </button>
+        <div className="header-actions">
+          {user ? (
+            <>
+              <span className="muted">Halo, {user.name}</span>
+              <button className="btn secondary" onClick={logout}>Logout</button>
+              <button className="btn secondary" onClick={() => setShow(!show)}>
+                {show ? "Tutup CRUD" : "Kelola Produk (CRUD)"}
+              </button>
+            </>
+          ) : (
+            <button className="btn secondary" onClick={() => setShow(!show)}>
+              {show ? "Tutup Login" : "Login / Register"}
+            </button>
+          )}
+        </div>
       </header>
       <section className="hero">
         <div className="eyebrow">Merchandise Delivery</div>
@@ -96,7 +155,46 @@ export default function HomePage() {
         <p className="muted">Produk tersimpan di MySQL Aiven.</p>
         {error && <p className="error">{error}</p>}
         {message && <p className="notice">{message}</p>}
-        {show && (
+        {!user && show && (
+          <section className="admin auth-card">
+            <h2>{authMode === "login" ? "Login" : "Register"}</h2>
+            <form className="form" onSubmit={authenticate}>
+              {authMode === "register" && (
+                <input
+                  placeholder="Nama"
+                  required
+                  value={authForm.name}
+                  onChange={(e) => setAuthForm({ ...authForm, name: e.target.value })}
+                />
+              )}
+              <input
+                placeholder="Email"
+                type="email"
+                required
+                value={authForm.email}
+                onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+              />
+              <input
+                placeholder="Password (minimal 8 karakter)"
+                type="password"
+                minLength="8"
+                required
+                value={authForm.password}
+                onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+              />
+              <button className="btn primary">
+                {authMode === "login" ? "Login" : "Register"}
+              </button>
+            </form>
+            <button
+              className="link-button"
+              onClick={() => setAuthMode(authMode === "login" ? "register" : "login")}
+            >
+              {authMode === "login" ? "Belum punya akun? Register" : "Sudah punya akun? Login"}
+            </button>
+          </section>
+        )}
+        {user && show && (
           <section className="admin">
             <h2>{editId ? "Edit Produk" : "Tambah Produk"}</h2>
             <form className="form" onSubmit={save}>
@@ -106,12 +204,7 @@ export default function HomePage() {
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
-              <input
-                placeholder="Kategori"
-                required
-                value={form.category}
-                onChange={(e) => setForm({ ...form, category: e.target.value })}
-              />
+              <input value="Gantungan Kunci" disabled aria-label="Kategori" />
               <input
                 placeholder="Harga"
                 type="number"

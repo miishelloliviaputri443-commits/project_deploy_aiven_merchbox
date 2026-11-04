@@ -30,7 +30,7 @@ export async function POST(request) {
     if (
       !b.name?.trim() ||
       !b.description?.trim() ||
-      !b.category?.trim() ||
+      b.category?.trim() !== "Gantungan Kunci" ||
       !Number.isInteger(Number(b.price)) ||
       Number(b.price) < 0 ||
       !Number.isInteger(Number(b.stock)) ||
@@ -48,7 +48,7 @@ export async function POST(request) {
       [
         b.name.trim(),
         b.description.trim(),
-        b.category.trim(),
+        "Gantungan Kunci",
         Number(b.price),
         Number(b.stock),
         b.imageUrl?.trim() || null,
