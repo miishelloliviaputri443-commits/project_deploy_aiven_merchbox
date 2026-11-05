@@ -8,5 +8,6 @@ Struktur satu aplikasi Next.js mengikuti screenshot: app/, app/api/products, lib
 4. Deploy repository ini ke Vercel dan masukkan environment variables yang sama di Project Settings.
 
 CRUD produk: GET/POST /api/products dan GET/PUT/DELETE /api/products/:id.
-Database produk difokuskan hanya untuk kategori `Gantungan Kunci`. Saat menjalankan schema terbaru, produk dengan kategori lain akan dihapus dan produk baru wajib memakai kategori tersebut.
+Database produk mendukung kategori `Gantungan Kunci` dan `Pin`. Form dan API memvalidasi agar hanya dua kategori ini yang dapat digunakan.
+Edit produk disimpan langsung ke MySQL Aiven melalui endpoint `PUT /api/products/:id`, sehingga tetap tersimpan setelah server direstart. Menjalankan ulang schema tidak menimpa data produk yang sudah ada.
 Autentikasi pengguna tersedia melalui POST `/api/auth/register`, POST `/api/auth/login`, POST `/api/auth/logout`, dan GET `/api/auth/me`. Password disimpan sebagai hash, sedangkan login disimpan dalam cookie bertanda tangan menggunakan `AUTH_SECRET`. Database hanya membutuhkan tabel `users`.

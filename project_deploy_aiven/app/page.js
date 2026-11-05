@@ -102,6 +102,7 @@ export default function HomePage() {
       setMessage(j.message || "Berhasil");
       setForm(empty);
       setEditId(null);
+      setShow(false);
       await load();
     } catch (e) {
       setError(e.message);
@@ -131,7 +132,7 @@ export default function HomePage() {
               <span className="muted">Halo, {user.name}</span>
               <button className="btn secondary" onClick={logout}>Logout</button>
               <button className="btn secondary" onClick={() => setShow(!show)}>
-                {show ? "Tutup CRUD" : "Kelola Produk (CRUD)"}
+                {show ? "Tutup" : "Tambah Produk"}
               </button>
             </>
           ) : (
@@ -142,7 +143,7 @@ export default function HomePage() {
         </div>
       </header>
       <section className="hero">
-        <div className="eyebrow">Merchandise Delivery</div>
+        <div className="eyebrow">MerchBox</div>
         <h1>
           Barang kecil,
           <br />
@@ -204,7 +205,15 @@ export default function HomePage() {
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
               />
-              <input value="Gantungan Kunci" disabled aria-label="Kategori" />
+              <select
+                required
+                value={form.category}
+                aria-label="Kategori"
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+              >
+                <option value="Gantungan Kunci">Gantungan Kunci</option>
+                <option value="Pin">Pin</option>
+              </select>
               <input
                 placeholder="Harga"
                 type="number"
