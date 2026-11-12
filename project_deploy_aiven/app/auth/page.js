@@ -43,7 +43,7 @@ export default function AuthPage() {
     <main className="auth-page">
       <section className="auth-panel">
         <div className="brand">MERCH<span>BOX</span></div>
-        <p className="eyebrow">Keychain merchandise</p>
+        <p className="eyebrow">Merchandise Maker & Shop</p>
         <h1>{mode === "login" ? "Selamat datang kembali." : "Buat akun baru."}</h1>
         <p className="muted">
           {mode === "login"
