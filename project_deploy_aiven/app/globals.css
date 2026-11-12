@@ -17,4 +17,30 @@ h1{font-size:clamp(42px,7vw,80px);line-height:.98;margin:18px 0}.hero p{color:va
 .auth-panel{background:#fff;border:1px solid var(--line);max-width:460px;padding:40px;width:100%}
 .auth-panel h1{font-size:42px}
 .auth-form{display:grid;gap:12px;margin:28px 0 18px}.auth-form input{border:1px solid #ccc;font:inherit;padding:12px;width:100%}
+.brand-link{color:inherit;text-decoration:none}
+.shop-hero .btn{display:inline-block;margin-top:18px;text-decoration:none}
+.shop-heading,.request-item-heading{align-items:center;display:flex;gap:16px;justify-content:space-between}
+.shop-heading h2{margin-bottom:8px}
+.shop-actions{align-items:end;display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.quantity-field{color:var(--muted);display:grid;font-size:13px;gap:5px}
+.quantity-field input{border:1px solid #ccc;font:inherit;padding:9px;width:76px}
+.shop-actions .btn:disabled{cursor:not-allowed;opacity:.5}
+.shop-login{display:inline-block;margin-top:18px;text-decoration:none}
+.art img{height:100%;object-fit:cover;width:100%}
+.empty-state{background:var(--soft);color:var(--muted);margin-top:32px;padding:36px;text-align:center}
+.publish-option{align-items:center;display:flex;gap:10px;grid-column:1/-1}
+.publish-option input{height:18px;width:18px}
+.request-list{display:grid;gap:12px;margin-top:20px}
+.request-item{border:1px solid var(--line);padding:16px}
+.request-item.unread{border-left:4px solid var(--accent)}
+.request-item p{line-height:1.5;margin:10px 0}
+.request-item-heading .muted{margin:6px 0}
+.request-item-heading a{color:inherit}
+.modal-backdrop{align-items:center;background:#17202a88;display:flex;inset:0;justify-content:center;padding:20px;position:fixed;z-index:10}
+.request-modal{background:#fff;border:1px solid var(--line);max-width:520px;padding:32px;position:relative;width:100%}
+.request-modal h2{font-size:28px;margin:12px 0}
+.modal-close{background:none;border:0;cursor:pointer;font-size:28px;position:absolute;right:16px;top:10px}
+.request-form{display:grid;gap:16px;margin-top:22px}
+.request-form label{display:grid;font-weight:700;gap:8px}
+.request-form textarea{border:1px solid #ccc;font:inherit;min-height:130px;padding:12px;resize:vertical}
 @media(max-width:600px){.header{padding:20px 16px}.hero{padding:64px 16px}.main{padding:40px 16px}.form{grid-template-columns:1fr}.form textarea{grid-column:auto}}

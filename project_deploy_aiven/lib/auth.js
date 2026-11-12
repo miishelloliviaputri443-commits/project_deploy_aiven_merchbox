@@ -49,7 +49,7 @@ export async function getCurrentUser() {
     return null;
   }
   const [rows] = await getPool().execute(
-    "SELECT id,name,email FROM users WHERE id=?",
+    "SELECT id,name,email,role FROM users WHERE id=?",
     [Number(userId)],
   );
   return rows[0] || null;

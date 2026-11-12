@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server";
 import getPool from "@/lib/db";
+import { getCurrentUser } from "@/lib/auth";
 export const runtime = "nodejs";
-export async function GET() {
+export async function GET(request) {
   try {
+    const adminView = new URL(request.url).searchParams.get("admin") === "1";
+    if (adminView && (await getCurrentUser())?.role !== "admin") {
+      return NextResponse.json(
+        { success: false, message: "Akses admin diperlukan." },
+        { status: 403 },
+      );
+    }
+    const where = adminView ? "" : "WHERE is_published=1 AND stock>0";
     const [data] = await getPool().query(
-      "SELECT id,name,description,category,price,stock,image_url AS imageUrl FROM products ORDER BY id DESC",
+      `SELECT id,name,description,category,price,stock,image_url AS imageUrl,is_published AS isPublished FROM products ${where} ORDER BY id DESC`,
     );
     return NextResponse.json({ success: true, data });
   } catch (e) {
@@ -26,6 +35,12 @@ export async function GET() {
 }
 export async function POST(request) {
   try {
+    if ((await getCurrentUser())?.role !== "admin") {
+      return NextResponse.json(
+        { success: false, message: "Akses admin diperlukan." },
+        { status: 403 },
+      );
+    }
     const b = await request.json();
     if (
       !b.name?.trim() ||
@@ -44,7 +59,7 @@ export async function POST(request) {
         { status: 400 },
       );
     const [r] = await getPool().execute(
-      "INSERT INTO products(name,description,category,price,stock,image_url) VALUES(?,?,?,?,?,?)",
+      "INSERT INTO products(name,description,category,price,stock,image_url,is_published) VALUES(?,?,?,?,?,?,?)",
       [
         b.name.trim(),
         b.description.trim(),
@@ -52,6 +67,7 @@ export async function POST(request) {
         Number(b.price),
         Number(b.stock),
         b.imageUrl?.trim() || null,
+        b.isPublished === true,
       ],
     );
     return NextResponse.json(

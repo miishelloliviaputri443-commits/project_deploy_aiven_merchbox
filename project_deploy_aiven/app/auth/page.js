@@ -13,7 +13,10 @@ export default function AuthPage() {
     fetch("/api/auth/me", { cache: "no-store" })
       .then((response) => response.json())
       .then((result) => {
-        if (result.data) window.location.href = "/";
+        if (result.data) {
+          window.location.href =
+            result.data.role === "admin" ? "/admin" : "/shop";
+        }
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -31,7 +34,12 @@ export default function AuthPage() {
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.message || "Autentikasi gagal.");
-      window.location.href = "/";
+      const sessionResponse = await fetch("/api/auth/me", { cache: "no-store" });
+      const session = await sessionResponse.json();
+      if (!sessionResponse.ok || !session.data) {
+        throw new Error(session.message || "Gagal memeriksa sesi.");
+      }
+      window.location.href = session.data.role === "admin" ? "/admin" : "/shop";
     } catch (submitError) {
       setError(submitError.message);
     }
@@ -47,8 +55,8 @@ export default function AuthPage() {
         <h1>{mode === "login" ? "Selamat datang kembali." : "Buat akun baru."}</h1>
         <p className="muted">
           {mode === "login"
-            ? "Login untuk melihat dan mengelola koleksi gantungan kunci."
-            : "Register untuk masuk ke halaman utama MerchBox."}
+            ? "Login untuk memesan produk dan mengirim permintaan barang."
+            : "Buat akun untuk berbelanja dan menghubungi pengelola."}
         </p>
         {error && <p className="error">{error}</p>}
         {message && <p className="notice">{message}</p>}
