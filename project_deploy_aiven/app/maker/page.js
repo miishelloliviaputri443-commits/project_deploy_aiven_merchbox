@@ -69,6 +69,7 @@ export default function MakerPage() {
     if (user?.role !== "admin") return;
     const intervalId = window.setInterval(() => {
       loadRequests().catch((e) => setError(e.message));
+      load();
     }, 30000);
     return () => window.clearInterval(intervalId);
   }, [user]);

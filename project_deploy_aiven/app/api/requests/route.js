@@ -42,19 +42,17 @@ export async function POST(request) {
         { status: 400 },
       );
     }
-    const productName =
-      typeof body.productName === "string" ? body.productName.trim() : "";
     const message = typeof body.message === "string" ? body.message.trim() : "";
-    if (!productName || productName.length > 150 || !message || message.length > 3000) {
+    if (!message || message.length > 3000) {
       return NextResponse.json(
-        { success: false, message: "Nama barang dan pesan wajib diisi (maksimal 3000 karakter)." },
+        { success: false, message: "Pesan wajib diisi (maksimal 3000 karakter)." },
         { status: 400 },
       );
     }
 
     await getPool().execute(
       "INSERT INTO product_requests(user_id,name,email,product_name,message) VALUES(?,?,?,?,?)",
-      [user.id, user.name, user.email, productName, message],
+      [user.id, user.name, user.email, "Permintaan barang", message],
     );
     const adminEmail = process.env.ADMIN_EMAIL?.trim() || "";
     return NextResponse.json(

@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import getPool from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
+import { releaseExpiredReservations } from "@/lib/cart-reservations";
 export const runtime = "nodejs";
 export async function GET(request) {
+  let connection;
   try {
     const adminView = new URL(request.url).searchParams.get("admin") === "1";
     if (adminView && (await getCurrentUser())?.role !== "admin") {
@@ -12,11 +14,16 @@ export async function GET(request) {
       );
     }
     const where = adminView ? "" : "WHERE is_published=1 AND stock>0";
-    const [data] = await getPool().query(
+    connection = await getPool().getConnection();
+    await connection.beginTransaction();
+    await releaseExpiredReservations(connection);
+    const [data] = await connection.query(
       `SELECT id,name,description,category,price,stock,image_url AS imageUrl,is_published AS isPublished FROM products ${where} ORDER BY id DESC`,
     );
+    await connection.commit();
     return NextResponse.json({ success: true, data });
   } catch (e) {
+    if (connection) await connection.rollback();
     if (e instanceof SyntaxError)
       return NextResponse.json(
         { success: false, message: "JSON tidak valid." },
@@ -31,6 +38,8 @@ export async function GET(request) {
       },
       { status: 500 },
     );
+  } finally {
+    connection?.release();
   }
 }
 export async function POST(request) {

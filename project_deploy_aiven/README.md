@@ -14,10 +14,11 @@ Autentikasi pengguna tersedia melalui POST `/api/auth/register`, POST `/api/auth
 
 ## Toko dan permintaan pengguna
 
-- Jalankan ulang `schema.sql` untuk menambahkan status publikasi, tabel pesanan, dan kotak masuk permintaan.
+- Jalankan ulang `schema.sql` untuk menambahkan status publikasi, tabel pesanan, reservasi keranjang, dan kotak masuk permintaan.
 - Atur `ADMIN_EMAIL` di `.env.local` ke email akun pengelola, lalu restart aplikasi. Email tersebut otomatis mendapat akses admin walaupun kolom `role` masih `customer`. Sebagai alternatif, promosikan akun langsung di MySQL dengan `UPDATE users SET role='admin' WHERE email='email-pengelola-anda';`. Jangan jadikan pendaftaran publik sebagai cara memberikan akses admin.
 - Jika `ADMIN_EMAIL` diatur, form permintaan juga membuka aplikasi email pengguna dengan pesan yang sudah disiapkan.
 - Halaman pengguna tersedia di `/shop`. Pengunjung dapat melihat barang tayang dengan stok; pengguna login dapat membuat pesanan yang menahan stok dan berstatus menunggu konfirmasi admin.
+- Stok produk langsung dikurangi di database saat barang masuk keranjang dan dikembalikan saat barang dikeluarkan atau pengguna logout. Reservasi otomatis kedaluwarsa setelah dua jam; stok yang kedaluwarsa dilepas saat katalog/keranjang dimuat.
 - Halaman pengguna tersedia di `/shop`, sedangkan halaman maker khusus admin tersedia di `/maker`. Setelah login, admin otomatis diarahkan ke `/maker`; akun pengguna diarahkan ke `/shop`. URL lama `/admin` otomatis dialihkan ke `/maker`. Admin dapat mengedit atau menghapus barang langsung dari tabel, dan menambah barang lewat tombol “Tambah Barang”.
 - Form “Minta barang” menyimpan nama, email, barang, dan pesan ke kotak masuk notifikasi panel admin. Jika `ADMIN_EMAIL` diatur, aplikasi email pengguna juga dibuka dengan pesan yang sudah disiapkan. Pesan tersimpan di aplikasi walaupun email tidak dikirim.
 - Pengelola dapat menayangkan atau menyimpan produk sebagai draft dari panel maker di `/maker`. Produk baru secara default berupa draft.
