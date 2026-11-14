@@ -39,7 +39,7 @@ export default function ShopPage() {
   }, []);
   useEffect(() => {
     if (user?.role === "admin") {
-      window.location.replace("/admin");
+      window.location.replace("/maker");
     }
   }, [user]);
   useEffect(() => {
@@ -125,11 +125,6 @@ export default function ShopPage() {
           {user ? (
             <>
               <span className="muted">Halo, {user.name}</span>
-              {user.role === "admin" && (
-                <a className="btn secondary" href="/admin">
-                  Panel Admin
-                </a>
-              )}
               <button
                 className="btn secondary"
                 onClick={async () => {

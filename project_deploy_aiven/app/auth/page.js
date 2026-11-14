@@ -15,7 +15,7 @@ export default function AuthPage() {
       .then((result) => {
         if (result.data) {
           window.location.href =
-            result.data.role === "admin" ? "/admin" : "/shop";
+            result.data.role === "admin" ? "/maker" : "/shop";
         }
       })
       .catch(() => {})
@@ -39,7 +39,7 @@ export default function AuthPage() {
       if (!sessionResponse.ok || !session.data) {
         throw new Error(session.message || "Gagal memeriksa sesi.");
       }
-      window.location.href = session.data.role === "admin" ? "/admin" : "/shop";
+      window.location.href = session.data.role === "admin" ? "/maker" : "/shop";
     } catch (submitError) {
       setError(submitError.message);
     }

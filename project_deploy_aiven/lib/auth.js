@@ -52,7 +52,13 @@ export async function getCurrentUser() {
     "SELECT id,name,email,role FROM users WHERE id=?",
     [Number(userId)],
   );
-  return rows[0] || null;
+  const user = rows[0];
+  if (!user) return null;
+
+  const configuredAdminEmail = normalizeEmail(process.env.ADMIN_EMAIL);
+  return configuredAdminEmail && normalizeEmail(user.email) === configuredAdminEmail
+    ? { ...user, role: "admin" }
+    : user;
 }
 
 export async function clearSession() {

@@ -9,7 +9,7 @@ export default function HomePage() {
     fetch("/api/auth/me", { cache: "no-store" })
       .then((response) => response.json())
       .then((result) => {
-        window.location.replace(result.data?.role === "admin" ? "/admin" : "/shop");
+        window.location.replace(result.data?.role === "admin" ? "/maker" : "/shop");
       })
       .catch(() => {
         window.location.replace("/shop");

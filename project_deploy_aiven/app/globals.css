@@ -21,6 +21,9 @@ h1{font-size:clamp(42px,7vw,80px);line-height:.98;margin:18px 0}.hero p{color:va
 .shop-hero .btn{display:inline-block;margin-top:18px;text-decoration:none}
 .shop-heading,.request-item-heading{align-items:center;display:flex;gap:16px;justify-content:space-between}
 .shop-heading h2{margin-bottom:8px}
+.maker-products{margin:36px 0}
+.maker-actions{display:flex;gap:10px;margin-top:16px}
+.maker-actions .btn{min-width:88px}
 .shop-actions{align-items:end;display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 .quantity-field{color:var(--muted);display:grid;font-size:13px;gap:5px}
 .quantity-field input{border:1px solid #ccc;font:inherit;padding:9px;width:76px}
