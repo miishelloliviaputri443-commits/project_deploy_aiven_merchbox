@@ -81,7 +81,7 @@ export default function MakerPage() {
       return;
     }
     setUser(null);
-    window.location.href = "/auth";
+    window.location.href = "/shop";
   }
   if (checkingSession) {
     return <main className="auth-page"><p className="muted">Memuat halaman...</p></main>;
