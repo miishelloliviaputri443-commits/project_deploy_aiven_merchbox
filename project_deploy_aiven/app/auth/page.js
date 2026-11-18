@@ -8,6 +8,7 @@ export default function AuthPage() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me", { cache: "no-store" })
@@ -76,14 +77,25 @@ export default function AuthPage() {
             value={form.email}
             onChange={(event) => setForm({ ...form, email: event.target.value })}
           />
-          <input
-            type="password"
-            placeholder="Password minimal 8 karakter"
-            minLength="8"
-            required
-            value={form.password}
-            onChange={(event) => setForm({ ...form, password: event.target.value })}
-          />
+          <div className="password-field">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password minimal 8 karakter"
+              minLength="8"
+              required
+              value={form.password}
+              onChange={(event) => setForm({ ...form, password: event.target.value })}
+            />
+            <button
+              className="password-toggle"
+              type="button"
+              aria-label={showPassword ? "Sembunyikan password" : "Lihat password"}
+              aria-pressed={showPassword}
+              onClick={() => setShowPassword((visible) => !visible)}
+            >
+              {showPassword ? "Sembunyikan" : "Lihat"}
+            </button>
+          </div>
           <button className="btn primary" type="submit">
             {mode === "login" ? "Login" : "Register"}
           </button>
@@ -94,6 +106,7 @@ export default function AuthPage() {
             setMode(mode === "login" ? "register" : "login");
             setError("");
             setMessage("");
+            setShowPassword(false);
           }}
         >
           {mode === "login" ? "Belum punya akun? Register" : "Sudah punya akun? Login"}

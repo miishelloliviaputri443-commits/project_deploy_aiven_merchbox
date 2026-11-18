@@ -291,9 +291,9 @@ export default function ShopPage() {
         <h1>
           Temukan barang
           <br />
-          favoritmu.
+          favoritmu
         </h1>
-        <p>Produk pilihan yang sudah tersedia untuk dipesan.</p>
+        <p>Produk pilihan yang sudah tersedia untuk dipesan</p>
         <a className="btn primary" href="#produk">
           Lihat produk
         </a>
@@ -313,7 +313,7 @@ export default function ShopPage() {
         <div className="shop-heading">
           <div>
             <h2>Produk tersedia</h2>
-            <p className="muted">Pesanan akan menunggu konfirmasi admin.</p>
+            <p className="muted">Pesanan akan menunggu konfirmasi admin</p>
           </div>
           <span className="muted">
             {normalizedSearch
@@ -392,9 +392,9 @@ export default function ShopPage() {
             })}
           </div>
         ) : products.length ? (
-          <p className="empty-state">Tidak ada barang yang cocok dengan pencarian.</p>
+          <p className="empty-state">Tidak ada barang yang cocok dengan pencarian</p>
         ) : (
-          <p className="empty-state">Belum ada produk yang dipublikasikan.</p>
+          <p className="empty-state">Belum ada produk yang dipublikasikan</p>
         )}
         {user && (
           <section className="request-catalog">
@@ -430,7 +430,7 @@ export default function ShopPage() {
             <div className="eyebrow">Kirim pesan ke admin</div>
             <h2 id="request-title">Request Barang</h2>
             <p className="muted">
-              Tulis permintaan barang Anda. Pesan akan masuk ke notifikasi admin.
+              Tulis permintaan barang Anda. Pesan akan masuk ke notifikasi admin
             </p>
             <form className="request-form" onSubmit={sendRequest}>
               <label>

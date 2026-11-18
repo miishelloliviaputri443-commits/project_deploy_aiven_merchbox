@@ -177,14 +177,14 @@ export default function MakerPage() {
           )}
         </div>
       </header>
-      <section className="hero">
+      <section className="hero maker-hero">
         <div className="eyebrow">Halaman Maker · Admin MerchBox</div>
         <h1>
           Kelola
           <br />
-          merchandise.
+          merchandise
         </h1>
-        <p>Tambah, edit, hapus, dan publikasikan barang untuk pengguna.</p>
+        <p>Tambah, edit, hapus, dan publikasikan barang untuk pengguna</p>
       </section>
       <main className="main">
         <h2>Kelola Barang</h2>
@@ -303,7 +303,7 @@ export default function MakerPage() {
           <div className="shop-heading">
             <div>
               <h2>Data Merchandise</h2>
-              <p className="muted">Perubahan yang disimpan akan tampil di katalog pengguna.</p>
+              <p className="muted">Perubahan yang disimpan akan tampil di katalog pengguna</p>
             </div>
             <span className="muted">{products.length} produk</span>
           </div>
