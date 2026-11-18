@@ -2,6 +2,14 @@
 
 import { useEffect, useState } from "react";
 
+async function readJsonResponse(response) {
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    throw new Error("Server mengembalikan respons yang tidak valid. Silakan coba lagi.");
+  }
+  return response.json();
+}
+
 export default function AuthPage() {
   const [mode, setMode] = useState("login");
   const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -33,10 +41,10 @@ export default function AuthPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      const result = await response.json();
+      const result = await readJsonResponse(response);
       if (!response.ok) throw new Error(result.message || "Autentikasi gagal.");
       const sessionResponse = await fetch("/api/auth/me", { cache: "no-store" });
-      const session = await sessionResponse.json();
+      const session = await readJsonResponse(sessionResponse);
       if (!sessionResponse.ok || !session.data) {
         throw new Error(session.message || "Gagal memeriksa sesi.");
       }

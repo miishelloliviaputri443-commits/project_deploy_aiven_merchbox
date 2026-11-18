@@ -17,6 +17,9 @@ export default function ShopPage() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
   const [checkingOut, setCheckingOut] = useState(false);
+  const [buyNowPrompt, setBuyNowPrompt] = useState(null);
+  const [buyNowError, setBuyNowError] = useState("");
+  const [buyingNow, setBuyingNow] = useState(false);
   const [updatingCartId, setUpdatingCartId] = useState(null);
   const [requestOpen, setRequestOpen] = useState(false);
   const [requestMessage, setRequestMessage] = useState("");
@@ -115,6 +118,47 @@ export default function ShopPage() {
       setError(cartError.message);
     } finally {
       setUpdatingCartId(null);
+    }
+  }
+
+  function openBuyNowPrompt(product) {
+    setError("");
+    setNotice("");
+    setBuyNowError("");
+    const quantity = Number(quantities[product.id] || 1);
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > product.stock) {
+      setError("Jumlah produk tidak valid atau melebihi stok.");
+      return;
+    }
+    setBuyNowPrompt({ product, quantity });
+  }
+
+  async function confirmBuyNow() {
+    if (!buyNowPrompt || buyingNow) return;
+    setBuyNowError("");
+    setBuyingNow(true);
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: buyNowPrompt.product.id,
+          quantity: buyNowPrompt.quantity,
+        }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Pembelian gagal.");
+      setBuyNowPrompt(null);
+      setNotice(result.message || "Pesanan berhasil dibuat.");
+      try {
+        await loadProducts();
+      } catch (refreshError) {
+        setError(`Pesanan berhasil dibuat, tetapi katalog gagal diperbarui: ${refreshError.message}`);
+      }
+    } catch (purchaseError) {
+      setBuyNowError(purchaseError.message);
+    } finally {
+      setBuyingNow(false);
     }
   }
 
@@ -365,20 +409,29 @@ export default function ShopPage() {
                             }
                           />
                         </label>
-                        <button
-                          className="btn primary"
-                          disabled={
-                            updatingCartId === product.id ||
-                            !Number.isInteger(Number(quantities[product.id] || 1)) ||
-                            Number(quantities[product.id] || 1) < 1 ||
-                            Number(quantities[product.id] || 1) > availableStock
-                          }
-                          onClick={() => addToCart(product)}
-                        >
-                          {updatingCartId === product.id
-                            ? "Menyimpan..."
-                            : "Tambah ke keranjang"}
-                        </button>
+                        <div className="shop-purchase-buttons">
+                          <button
+                            className="btn primary"
+                            disabled={
+                              updatingCartId === product.id ||
+                              !Number.isInteger(Number(quantities[product.id] || 1)) ||
+                              Number(quantities[product.id] || 1) < 1 ||
+                              Number(quantities[product.id] || 1) > availableStock
+                            }
+                            onClick={() => addToCart(product)}
+                          >
+                            {updatingCartId === product.id
+                              ? "Menyimpan..."
+                              : "Tambah ke keranjang"}
+                          </button>
+                          <button
+                            className="btn secondary"
+                            disabled={buyingNow}
+                            onClick={() => openBuyNowPrompt(product)}
+                          >
+                            Beli Sekarang
+                          </button>
+                        </div>
                       </div>
                     </>
                   ) : (
@@ -448,6 +501,43 @@ export default function ShopPage() {
                 Kirim permintaan
               </button>
             </form>
+          </section>
+        </div>
+      )}
+      {buyNowPrompt && (
+        <div className="modal-backdrop" role="presentation">
+          <section
+            aria-labelledby="buy-now-title"
+            aria-modal="true"
+            className="request-modal"
+            role="dialog"
+          >
+            <div className="eyebrow">Konfirmasi pembelian</div>
+            <h2 id="buy-now-title">Beli sekarang</h2>
+            <p>Apakah anda ingin membeli ini?</p>
+            <p className="muted">
+              {buyNowPrompt.product.name} × {buyNowPrompt.quantity}
+            </p>
+            {buyNowError && <p className="error">{buyNowError}</p>}
+            <div className="purchase-actions">
+              <button
+                className="btn secondary"
+                disabled={buyingNow}
+                onClick={() => {
+                  setBuyNowPrompt(null);
+                  setBuyNowError("");
+                }}
+              >
+                Tidak
+              </button>
+              <button
+                className="btn primary"
+                disabled={buyingNow}
+                onClick={confirmBuyNow}
+              >
+                {buyingNow ? "Memproses..." : "Ya"}
+              </button>
+            </div>
           </section>
         </div>
       )}

@@ -1,7 +1,9 @@
 import mysql from "mysql2/promise";
-let pool;
+const poolKey = Symbol.for("merchbox.mysql.pool");
+
 export default function getPool() {
-  if (pool) return pool;
+  const existingPool = globalThis[poolKey];
+  if (existingPool) return existingPool;
   const config = {
     host: process.env.MYSQL_HOST || process.env.DB_HOST,
     port: process.env.MYSQL_PORT || process.env.DB_PORT,
@@ -16,12 +18,13 @@ export default function getPool() {
   const ca = process.env.MYSQL_CA_CERT?.replace(/\\n/g, "\n");
   const rejectUnauthorized =
     process.env.MYSQL_SSL_REJECT_UNAUTHORIZED !== "false" && Boolean(ca);
-  pool = mysql.createPool({
+  const pool = mysql.createPool({
     ...config,
     port: Number(config.port || 3306),
     ssl: ca ? { ca, rejectUnauthorized: true } : { rejectUnauthorized },
     waitForConnections: true,
-    connectionLimit: 5,
+    connectionLimit: 3,
   });
+  globalThis[poolKey] = pool;
   return pool;
 }

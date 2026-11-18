@@ -41,3 +41,41 @@ export async function PATCH(_request, { params }) {
     );
   }
 }
+
+export async function DELETE(_request, { params }) {
+  const user = await getCurrentUser();
+  if (user?.role !== "admin") {
+    return NextResponse.json(
+      { success: false, message: "Akses admin diperlukan." },
+      { status: 403 },
+    );
+  }
+
+  const id = Number(params.id);
+  if (!Number.isInteger(id) || id < 1) {
+    return NextResponse.json(
+      { success: false, message: "ID permintaan tidak valid." },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const [result] = await getPool().execute(
+      "DELETE FROM product_requests WHERE id=?",
+      [id],
+    );
+    if (!result.affectedRows) {
+      return NextResponse.json(
+        { success: false, message: "Permintaan tidak ditemukan." },
+        { status: 404 },
+      );
+    }
+    return NextResponse.json({ success: true, message: "Notifikasi berhasil dihapus." });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { success: false, message: "Gagal menghapus permintaan." },
+      { status: 500 },
+    );
+  }
+}

@@ -146,6 +146,18 @@ export default function MakerPage() {
       setError(e.message);
     }
   }
+  async function removeRequest(requestId) {
+    if (!confirm("Hapus notifikasi permintaan ini?")) return;
+    try {
+      const r = await fetch(`/api/requests/${requestId}`, { method: "DELETE" });
+      const j = await r.json();
+      if (!r.ok) throw Error(j.message || "Gagal menghapus permintaan");
+      setMessage(j.message || "Notifikasi berhasil dihapus.");
+      await loadRequests();
+    } catch (e) {
+      setError(e.message);
+    }
+  }
   return (
     <>
       <header className="header">
@@ -162,7 +174,6 @@ export default function MakerPage() {
               >
                 Permintaan masuk ({requests.filter((request) => !request.isRead).length})
               </button>
-              <button className="btn secondary" onClick={logout}>Logout</button>
               <button
                 className="btn primary"
                 onClick={() => {
@@ -173,6 +184,7 @@ export default function MakerPage() {
               >
                 {show ? "Tutup Form" : "Tambah Barang"}
               </button>
+              <button className="btn secondary" onClick={logout}>Logout</button>
             </>
           )}
         </div>
@@ -187,8 +199,6 @@ export default function MakerPage() {
         <p>Tambah, edit, hapus, dan publikasikan barang untuk pengguna</p>
       </section>
       <main className="main">
-        <h2>Kelola Barang</h2>
-        <p className="muted">Tambah barang baru, ubah data, hapus, atau atur status publikasi.</p>
         {error && <p className="error">{error}</p>}
         {message && <p className="notice">{message}</p>}
         {user && showRequests && (
@@ -207,14 +217,22 @@ export default function MakerPage() {
                           {request.name} · <a href={`mailto:${request.email}`}>{request.email}</a>
                         </p>
                       </div>
-                      {!request.isRead && (
+                      <div className="request-actions">
+                        {!request.isRead && (
+                          <button
+                            className="btn secondary"
+                            onClick={() => markRequestRead(request.id)}
+                          >
+                            Tandai dibaca
+                          </button>
+                        )}
                         <button
                           className="btn secondary"
-                          onClick={() => markRequestRead(request.id)}
+                          onClick={() => removeRequest(request.id)}
                         >
-                          Tandai dibaca
+                          Hapus
                         </button>
-                      )}
+                      </div>
                     </div>
                     <p>{request.message}</p>
                     <small className="muted">{new Date(request.createdAt).toLocaleString("id-ID")}</small>
@@ -226,6 +244,14 @@ export default function MakerPage() {
         )}
         {show && (
           <section className="admin">
+            {!editId && (
+              <>
+                <h2>Kelola Barang</h2>
+                <p className="muted">
+                  Tambah barang baru, ubah data, hapus, atau atur status publikasi.
+                </p>
+              </>
+            )}
             <h2>{editId ? "Edit Produk" : "Tambah Produk"}</h2>
             <form className="form" onSubmit={save}>
               <input

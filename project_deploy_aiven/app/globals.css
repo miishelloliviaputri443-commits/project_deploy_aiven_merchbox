@@ -5,7 +5,7 @@ body{margin:0;color:var(--ink);background:var(--paper);font-family:Arial,sans-se
 .header-actions{align-items:center;display:flex;gap:10px}
 .brand{font-size:24px;font-weight:800;letter-spacing:2px}.brand span{color:var(--accent)}
 .hero{background:var(--soft);padding:86px max(24px,calc((100% - 1072px)/2))}.eyebrow,.tag{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase}
-.maker-hero{background:linear-gradient(90deg,rgba(245,239,231,.98) 0%,rgba(245,239,231,.92) 38%,rgba(245,239,231,.18) 100%),url("/merchbox-hero.jpg") center/cover no-repeat}
+.maker-hero,.shop-hero{background:linear-gradient(90deg,rgba(245,239,231,.78) 0%,rgba(245,239,231,.56) 30%,rgba(245,239,231,.12) 65%,rgba(245,239,231,.04) 100%),url("/merchbox-hero.jpg") center/cover no-repeat}
 h1{font-size:clamp(42px,7vw,80px);line-height:.98;margin:18px 0}.hero p{color:var(--muted);font-size:18px}
 .main{margin:auto;max-width:1120px;padding:56px 24px}.main h2{font-size:30px;margin:0 0 8px}.muted{color:var(--muted)}
 .grid{display:grid;gap:24px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));margin-top:32px}.product{border:1px solid var(--line);background:#fff}.art{align-items:center;background:var(--soft);display:flex;font-size:64px;height:220px;justify-content:center;overflow:hidden}.info{padding:20px}.info h3{margin:10px 0 8px}.desc{color:var(--muted);line-height:1.5;min-height:44px}.price-row{display:flex;justify-content:space-between;margin-top:22px}
@@ -27,9 +27,20 @@ h1{font-size:clamp(42px,7vw,80px);line-height:.98;margin:18px 0}.hero p{color:va
 .shop-search label{font-weight:700}
 .shop-search input{border:1px solid #ccc;font:inherit;padding:12px;width:100%}
 .maker-products{margin:36px 0}
-.maker-actions{display:flex;gap:10px;margin-top:16px}
-.maker-actions .btn{min-width:88px}
-.shop-actions{align-items:end;display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.maker-products .product{display:flex;flex-direction:column}
+.maker-products .info{display:flex;flex:1;flex-direction:column}
+.maker-products .desc{margin:6px 0 26px}
+.maker-products .price-row{margin-top:32px}
+.maker-actions{display:flex;gap:10px}
+.maker-products .maker-actions{margin-top:auto;padding-top:10px}
+.maker-actions .btn{border-radius:6px;min-width:88px}
+.main#produk .product{display:flex;flex-direction:column}
+.main#produk .product .info{display:flex;flex:1;flex-direction:column}
+.main#produk .product .desc{margin:6px 0 26px}
+.main#produk .shop-actions{margin-top:auto;padding-top:18px}
+.shop-actions{display:grid;gap:8px;margin-top:18px}
+.shop-purchase-buttons{align-items:center;display:flex;flex-wrap:wrap;gap:6px}
+.shop-purchase-buttons .btn{border-radius:6px}
 .request-catalog{align-items:center;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:40px;padding-top:24px;text-align:center}
 .request-catalog p{margin:0}
 .quantity-field{color:var(--muted);display:grid;font-size:13px;gap:5px}
@@ -52,6 +63,7 @@ h1{font-size:clamp(42px,7vw,80px);line-height:.98;margin:18px 0}.hero p{color:va
 .publish-option input{height:18px;width:18px}
 .request-list{display:grid;gap:12px;margin-top:20px}
 .request-item{border:1px solid var(--line);padding:16px}
+.request-actions{display:flex;flex-wrap:wrap;gap:8px}
 .request-item.unread{border-left:4px solid var(--accent)}
 .request-item p{line-height:1.5;margin:10px 0}
 .request-item-heading .muted{margin:6px 0}
@@ -59,6 +71,7 @@ h1{font-size:clamp(42px,7vw,80px);line-height:.98;margin:18px 0}.hero p{color:va
 .modal-backdrop{align-items:center;background:#17202a88;display:flex;inset:0;justify-content:center;padding:20px;position:fixed;z-index:10}
 .request-modal{background:#fff;border:1px solid var(--line);max-width:520px;padding:32px;position:relative;width:100%}
 .request-modal h2{font-size:28px;margin:12px 0}
+.purchase-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:24px}
 .modal-close{background:none;border:0;cursor:pointer;font-size:28px;position:absolute;right:16px;top:10px}
 .request-form{display:grid;gap:16px;margin-top:22px}
 .request-form label{display:grid;font-weight:700;gap:8px}
