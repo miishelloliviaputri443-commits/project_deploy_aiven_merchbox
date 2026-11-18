@@ -1,30 +1,38 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:flutter_app/main.dart';
+import 'package:merchbox_flutter/models.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  test('Product parses API numeric and boolean values', () {
+    final product = Product.fromJson({
+      'id': 42,
+      'name': 'Acrylic charm',
+      'description': 'Custom item',
+      'category': 'Gantungan Kunci',
+      'price': '12000',
+      'stock': 7,
+      'imageUrl': '',
+      'isPublished': 1,
+    });
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(product.id, 42);
+    expect(product.price, 12000);
+    expect(product.stock, 7);
+    expect(product.imageUrl, isNull);
+    expect(product.isPublished, isTrue);
+    expect(product.toJson()['isPublished'], isTrue);
+  });
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+  test('Cart item accepts numeric strings from API', () {
+    final item = CartItem.fromJson({
+      'productId': '6',
+      'quantity': '2',
+      'name': 'Pin',
+      'price': '8000',
+      'stock': 4,
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(item.productId, 6);
+    expect(item.quantity, 2);
+    expect(item.price, 8000);
   });
 }

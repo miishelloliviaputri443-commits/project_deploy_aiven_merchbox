@@ -1,11 +1,11 @@
 {
-    "name": "flutter_app",
-    "short_name": "flutter_app",
+    "name": "MerchBox",
+    "short_name": "MerchBox",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#FFFDF9",
+    "theme_color": "#EE6C4D",
+    "description": "Merchandise pilihan dari MerchBox.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
