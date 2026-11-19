@@ -21,12 +21,20 @@ class ApiService {
       : _client = client ??
             (BrowserClient()..withCredentials = true);
 
-  static const _baseUrl = String.fromEnvironment('API_BASE_URL');
+  static const _configuredBaseUrl = String.fromEnvironment('API_BASE_URL');
   final http.Client _client;
 
   Uri _uri(String path) {
-    if (_baseUrl.isEmpty) return Uri.base.resolve(path);
-    return Uri.parse('${_baseUrl.replaceFirst(RegExp(r'/+$'), '')}$path');
+    if (_configuredBaseUrl.isNotEmpty) {
+      return Uri.parse(
+        '${_configuredBaseUrl.replaceFirst(RegExp(r'/+$'), '')}$path',
+      );
+    }
+    final host = Uri.base.host;
+    if (host == 'localhost' || host == '127.0.0.1') {
+      return Uri.parse('http://localhost:3000$path');
+    }
+    return Uri.base.resolve(path);
   }
 
   Future<Map<String, dynamic>> _request(
